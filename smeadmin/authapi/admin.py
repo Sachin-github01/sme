@@ -25,7 +25,7 @@ class UserModelAdmin(BaseUserAdmin):
             'fields': ('email', 'name', 'tc', 'password1', 'password2'),
         }),
     )
-    search_fields = ('email','name', 'admin')
+    search_fields = ('email', 'name', 'admin')
     ordering = ('email', 'id')
     filter_horizontal = ()
 
