@@ -1,0 +1,21 @@
+.navbar_wrapper {
+  display: flex;
+  height: 5rem;
+  width: 100%;
+  background-color: coral;
+  align-items: center;
+  justify-content: space-around;
+  gap: 20rem;
+  position: fixed;
+  top: 0;
+  z-index: 999;
+}
+.navbar_wrapper .logo {
+  font-size: 1rem;
+  font-weight: bolder;
+  cursor: pointer;
+}
+.navbar_wrapper .user {
+  font-size: 1rem;
+  font-weight: bolder;
+}
