@@ -7,7 +7,7 @@ const NotFound = () => {
     <div className={styles.notfound}>
       <img src={sad} alt="sad" />
       <h1>404 </h1>
-      <p>error not found: This link is not valid</p>
+      <p>error not found: This url is not valid</p>
     </div>
   );
 };

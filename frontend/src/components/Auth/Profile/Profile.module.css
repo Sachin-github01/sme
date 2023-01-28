@@ -1,0 +1,41 @@
+.profile_wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+}
+.profile_wrapper h2 {
+  display: flex;
+  margin-top: 10rem;
+}
+.profile_data {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+.profile_data span {
+  font-size: 1.5rem;
+  padding: 0.5rem;
+}
+.profile_wrapper h5 {
+  font-size: 1.5rem;
+  /* text-decoration: underline; */
+  /* text-decoration-thickness: 3px; */
+  /* text-underline-offset: 0.3rem; */
+  margin-top: 1rem;
+  cursor: pointer;
+
+  margin-right: 5rem;
+}
+.logout h6 {
+  font-size: 1.5rem;
+  /* text-decoration: underline; */
+  /* text-decoration-thickness: 3px; */
+  /* text-underline-offset: 0.3rem; */
+  margin-top: 1rem;
+  cursor: pointer;
+
+  margin-right: 10rem;
+}

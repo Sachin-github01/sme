@@ -7,6 +7,8 @@ import User from "./components/Auth/User/User";
 import SendPasswordResetEmail from "./components/Auth/SendPasswordResetEmail/SendPasswordResetEmail";
 import Register from "./components/Auth/Register/Register";
 import ChangePassword from "./components/Auth/ChangePassword/ChangePassword";
+import ResetPassword from "./components/Auth/ResetPassword/ResetPassword";
+import Profile from "./components/Auth/Profile/Profile";
 
 function App() {
   return (
@@ -15,12 +17,14 @@ function App() {
       <Routes>
         <Route path="/not-found" element={<NotFound />} />
         <Route path="/" element={<Home />} />
-        <Route path="user/" element={<User />} />
+        <Route path="user-login" element={<User />} />
+        <Route path="user/register" element={<Register />} />
         <Route
-          path="user/forgot-password/"
+          path="user/forgot-password"
           element={<SendPasswordResetEmail />}
         />
-        <Route path="user/register/" element={<Register />} />
+        <Route path="user/reset-password" element={<ResetPassword />} />
+        <Route path="user/profile" element={<Profile />} />
         <Route
           path="user/profile/change-password/"
           element={<ChangePassword />}

@@ -46,3 +46,6 @@
   background-color: coral;
   /* text-transform: uppercase; */
 }
+.password_reset_alert {
+  margin-top: 2rem;
+}

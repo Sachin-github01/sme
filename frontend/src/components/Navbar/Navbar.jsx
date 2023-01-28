@@ -1,19 +1,19 @@
 import React from "react";
 import styles from "./Navbar.module.css";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <div className={styles.navbar_wrapper}>
       <div className={styles.logo}>
-        <Link to="/">
+        <NavLink to="/">
           <h2>VEUZON</h2>
-        </Link>
+        </NavLink>
       </div>
       <div className={styles.user}>
-        <Link to="/user">
-          <span>Login/Register</span>
-        </Link>
+        <NavLink to="user-login">
+          <span>Login</span>
+        </NavLink>
       </div>
     </div>
   );
