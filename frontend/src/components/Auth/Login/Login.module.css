@@ -60,3 +60,18 @@
 .login_alert {
   margin-top: 2rem;
 }
+.non_field_error {
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+.success_message {
+  font-size: 1.2rem;
+  color: green;
+  margin-top: 2rem;
+}
+.custom_error {
+  color: red;
+}
+.non_field_error {
+  color: red;
+}

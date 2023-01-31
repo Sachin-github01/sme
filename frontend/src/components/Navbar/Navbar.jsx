@@ -1,8 +1,10 @@
 import React from "react";
 import styles from "./Navbar.module.css";
 import { Link, NavLink } from "react-router-dom";
+import { getToken } from "../../redux/LocalStorage";
 
 const Navbar = () => {
+  const { access_token } = getToken();
   return (
     <div className={styles.navbar_wrapper}>
       <div className={styles.logo}>
@@ -10,11 +12,20 @@ const Navbar = () => {
           <h2>VEUZON</h2>
         </NavLink>
       </div>
-      <div className={styles.user}>
-        <NavLink to="user-login">
-          <span>Login</span>
-        </NavLink>
-      </div>
+      {/* After login redirect ot profile  */}
+      {access_token ? (
+        <div className={styles.user}>
+          <NavLink to="/user/profile">
+            <span>Profile</span>
+          </NavLink>
+        </div>
+      ) : (
+        <div className={styles.user}>
+          <NavLink to="/login">
+            <span>Login</span>
+          </NavLink>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,23 +1,42 @@
+from django.contrib.auth import authenticate
 from rest_framework import serializers
 from .models import User
 from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from rest_framework.exceptions import ValidationError
 from .utils import Util
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        error_messages={
+            'invalid': 'Enter a valid email address.',
+            'blank': 'Email field is required'
+        }
+    )
+    name = serializers.CharField(error_messages={'blank': 'Name field is required'})
+
+    password = serializers.CharField(error_messages={'blank': 'Password field is required'}
+
+                                     )
     # We are writing this becoz we need confirm password field in our Registratin Request
-    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    password2 = serializers.CharField(error_messages={
+        'blank': 'Confirm password field is required'
+    })
+    tc = serializers.BooleanField(error_messages={'null': 'You must agree to the terms and conditions.'})
 
     class Meta:
         model = User
         fields = ['email', 'name', 'password', 'password2', 'tc']
         extra_kwargs = {
-            'password': {'write_only': True}
+            'password': {'write_only': True},
+            'email': {'read_only': True},
+            'name': {'read_only': True}
         }
 
-    # Validating Password and Confirm Password while Registration
+        # Validating Password and Confirm Password while Registration
+
     def validate(self, attrs):
         password = attrs.get('password')
         password2 = attrs.get('password2')
@@ -25,12 +44,26 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Password and Confirm Password doesn't match")
         return attrs
 
+    def validate_email(self, attrs):
+        email = attrs
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("Email already exists. Please enter a different email.")
+        return attrs
+
     def create(self, validate_data):
         return User.objects.create_user(**validate_data)
 
 
 class UserLoginSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(max_length=255)
+    email = serializers.EmailField(
+        error_messages={
+            'invalid': 'Enter a valid email address.',
+            'blank': 'Email field is required'
+        }
+    )
+    password = serializers.CharField(error_messages={'blank': 'Password field is required'})
+
+    # email = serializers.EmailField(max_length=255)
 
     class Meta:
         model = User
@@ -44,8 +77,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class UserChangePasswordSerializer(serializers.Serializer):
-    password = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only=True)
-    password2 = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only=True)
+    password = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only=True,
+                                     error_messages={'blank': 'Password field is required'})
+    password2 = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only=True,
+                                      error_messages={'blank': 'Confirm password field is required'})
 
     class Meta:
         fields = ['password', 'password2']
@@ -62,7 +97,12 @@ class UserChangePasswordSerializer(serializers.Serializer):
 
 
 class SendPasswordResetEmailSerializer(serializers.Serializer):
-    email = serializers.EmailField(max_length=255)
+    email = serializers.EmailField(
+        error_messages={
+            'invalid': 'Enter a valid email address.',
+            'blank': 'Email field is required'
+        }
+    )
 
     class Meta:
         fields = ['email']
@@ -75,7 +115,7 @@ class SendPasswordResetEmailSerializer(serializers.Serializer):
             print('Encoded UID', uid)
             token = PasswordResetTokenGenerator().make_token(user)
             print('Password Reset Token', token)
-            link = 'http://localhost:3000/authapi/' + uid + '/' + token
+            link = 'http://localhost:3000/authapi/reset-password/' + uid + '/' + token
             print('Password Reset Link', link)
             # Send Email
             body = 'Click Following Link to Reset Your Password' + link
@@ -91,8 +131,10 @@ class SendPasswordResetEmailSerializer(serializers.Serializer):
 
 
 class UserPasswordResetSerializer(serializers.Serializer):
-    password = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only=True)
-    password2 = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only=True)
+    password = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only=True,
+                                     error_messages={'blank': 'Password field is required'})
+    password2 = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only=True,
+                                      error_messages={'blank': 'Confirm password field is required'})
 
     class Meta:
         fields = ['password', 'password2']
@@ -109,6 +151,7 @@ class UserPasswordResetSerializer(serializers.Serializer):
             user = User.objects.get(id=id)
             if not PasswordResetTokenGenerator().check_token(user, token):
                 raise serializers.ValidationError('Token is not Valid or Expired')
+            user.set_password(password)
             user.save()
             return attrs
         except DjangoUnicodeDecodeError as identifier:

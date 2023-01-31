@@ -1,29 +1,26 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./SPRE.module.css";
+import { useSendPasswordResetEmailMutation } from "../../../redux/userAuthApi";
 
 const SendPasswordResetEmail = () => {
-  const [error, setError] = useState({ status: false, msg: "", type: "" });
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const [server_error, setServerError] = useState({});
+  const [forgotpassword, { data, isLoading, error_success }] =
+    useSendPasswordResetEmailMutation();
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const data = new FormData(e.currentTarget);
     const actualData = {
       email: data.get("email"),
     };
-    if (actualData.email) {
+    const res = await forgotpassword(actualData);
+    if (res.error) {
+      setServerError(res.error.data.errors);
+    }
+    if (res.data) {
+      setServerError(res.data);
       document.getElementById("forgotpassword").reset();
-      setError({
-        status: true,
-        msg: "Password reset link sent to your email address.",
-        type: "success",
-      });
-    } else {
-      setError({
-        status: true,
-        msg: "Please provide a valid email address.",
-        type: "error",
-      });
     }
   };
 
@@ -35,6 +32,11 @@ const SendPasswordResetEmail = () => {
         <label>
           Enter your email:
           <input type="email" name="email" placeholder="Enter email:" />
+          {server_error.email ? (
+            <p className={styles.custom_error}>{server_error.email[0]}</p>
+          ) : (
+            ""
+          )}
         </label>
 
         <div className={styles.forgot_password_button}>
@@ -43,13 +45,9 @@ const SendPasswordResetEmail = () => {
           </button>
         </div>
       </form>
-      <div className={styles.user_login}>
-        <Link to="/user-login/">
-          <p>Login</p>
-        </Link>
-      </div>
-      <div className={styles.password_reset_alert}>
-        {error.status ? <p>{error.msg}</p> : ""}
+      <div className={styles.success_message}>
+        {data && data.message && <h4>{data.message}</h4>}
+        {error_success && <p>{error_success.message}</p>}
       </div>
     </div>
   );

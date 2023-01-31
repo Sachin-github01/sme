@@ -48,3 +48,16 @@
 .reset_password_alert {
   margin-top: 2rem;
 }
+.custom_error {
+  color: red;
+}
+
+.success_message {
+  font-size: 1.2rem;
+  margin-top: 2rem;
+  color: green;
+}
+.non_field_error {
+  font-size: 1.2rem;
+  color: red;
+}

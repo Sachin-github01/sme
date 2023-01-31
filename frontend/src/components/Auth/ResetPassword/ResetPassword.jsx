@@ -1,39 +1,33 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styles from "./RPW.module.css";
+import { useResetPasswordMutation } from "../../../redux/userAuthApi";
 
 const ResetPassword = () => {
-  const [error, setError] = useState({ status: false, msg: "", type: "" });
+  const [server_error, setServerError] = useState({});
+  const [resetpassword, { data, error_success }] = useResetPasswordMutation();
+  const { id, token } = useParams();
+
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const data = new FormData(e.currentTarget);
     const actualData = {
       password: data.get("password"),
-      confirm_password: data.get("confirm_password"),
+      password2: data.get("password2"),
     };
-    if (actualData.password && actualData.confirm_password) {
-      if (actualData.password === actualData.confirm_password) {
-        document.getElementById("resetpassword").reset();
-        setError({
-          status: true,
-          msg: "Password reset successfull",
-          type: "success",
-        });
-        // navigate("/user/profile");
-        setTimeout(() => {
-          navigate("/user-login/");
-        }, 1000); // 1 seconds delay
-      } else {
-        setError({
-          status: true,
-          msg: "Password and confirm password doesn't match.",
-          type: "error",
-        });
-      }
-    } else {
-      setError({ status: true, msg: "All fields are required", type: "error" });
+    const res = await resetpassword({ actualData, id, token });
+    if (res.error) {
+      setServerError(res.error.data.errors);
+    }
+    if (res.data) {
+      setServerError({});
+      document.getElementById("resetpassword").reset();
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
     }
   };
   return (
@@ -43,14 +37,24 @@ const ResetPassword = () => {
         <label>
           Enter New password:
           <input type="password" name="password" placeholder="Enter password" />
+          {server_error.password ? (
+            <p className={styles.custom_error}>{server_error.password[0]}</p>
+          ) : (
+            ""
+          )}
         </label>
         <label>
           Confirm New password:
           <input
             type="password"
-            name="confirm_password"
+            name="password2"
             placeholder="Enter confirm password"
           />
+          {server_error.password2 ? (
+            <p className={styles.custom_error}>{server_error.password2[0]}</p>
+          ) : (
+            ""
+          )}
         </label>
         <div className={styles.rese_password_button}>
           <button type="submit" value="Submit">
@@ -58,8 +62,17 @@ const ResetPassword = () => {
           </button>
         </div>
       </form>
-      <div className={styles.reset_password_alert}>
-        {error.status ? <p>{error.msg}</p> : ""}
+      <div className={styles.success_message}>
+        {data && data.message && <h4>{data.message}</h4>}
+        {error_success && <p>{error_success.message}</p>}
+      </div>
+
+      <div className={styles.non_field_error}>
+        {server_error.non_field_errors ? (
+          <p>{server_error.non_field_errors[0]}</p>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

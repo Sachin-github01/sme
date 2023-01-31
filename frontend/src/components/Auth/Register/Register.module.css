@@ -61,6 +61,7 @@
   font-size: 1.2rem;
 }
 .register_tc h5 {
+  font-size: 1.2rem;
   display: flex;
   gap: 0.5rem;
 }
@@ -69,4 +70,18 @@
 }
 .register_alert {
   margin-top: 2rem;
+}
+.tc p {
+  font-size: 1.2rem;
+}
+.custom_error {
+  color: red;
+}
+.non_field_error p {
+  color: red;
+}
+.success_message {
+  font-size: 1.2rem;
+  margin-top: 2rem;
+  color: green;
 }
