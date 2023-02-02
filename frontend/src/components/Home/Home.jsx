@@ -1,4 +1,5 @@
 import React from "react";
+import About from "../../pages/About/About";
 import styles from "./Home.module.css";
 
 const Home = () => {
@@ -6,6 +7,7 @@ const Home = () => {
     <>
       <div className={styles.Home_wrapper}>
         <h1>Home</h1>
+        {/* <About /> */}
       </div>
     </>
   );

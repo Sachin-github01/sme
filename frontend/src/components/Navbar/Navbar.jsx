@@ -16,6 +16,7 @@ const Navbar = () => {
       {access_token ? (
         <div className={styles.user}>
           <NavLink to="/user/profile">
+            {/* display user name here from server */}
             <span>Profile</span>
           </NavLink>
         </div>
