@@ -1,6 +1,6 @@
 .navbar_wrapper {
   display: flex;
-  height: 5rem;
+  height: 10vh;
   width: 100%;
   background-color: coral;
   align-items: center;
@@ -14,8 +14,70 @@
   font-size: 1rem;
   font-weight: bolder;
   cursor: pointer;
+  /* margin-left: 10rem; */
 }
-.navbar_wrapper .user {
-  font-size: 1rem;
-  font-weight: bolder;
+.user_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+}
+.user_container .user {
+  cursor: pointer;
+  padding: 0.5rem 1.5rem;
+  border: 2px solid #000;
+}
+.user span {
+  font-size: 1.2rem;
+}
+/* dropdown styles  */
+.dropdown {
+  display: none;
+}
+.user ul:hover {
+  position: absolute;
+  display: flex;
+  margin-top: 5rem;
+}
+/* Search bar styles  */
+.search_bar {
+  display: flex;
+  width: 50%;
+  flex-direction: row;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+}
+.search_bar input {
+  width: 60%;
+  min-height: 42px;
+  padding-left: 1rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 20rem 0rem 0rem 20rem;
+  background-color: #fff;
+
+  border: 1px solid #1a1818;
+}
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+
+  margin-left: 38rem;
+  position: fixed;
+  background-color: #fff;
+  border-left: 1px solid #1a1818;
+  padding-left: 1.3rem;
+  padding-right: 1.7rem;
+  cursor: pointer;
+  border-radius: 0rem 20rem 20rem 0rem;
+
+  border: 1px solid #1a1818;
+}
+.search_icon {
+  font-size: 1.2rem;
+  color: #9c9696;
 }
