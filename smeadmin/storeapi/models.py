@@ -1,7 +1,8 @@
 from django.db import models
 from django.db.models import RESTRICT
 from django.utils.safestring import mark_safe
-
+from django.template.defaultfilters import slugify
+from django.urls import reverse
 from authapi.models import User
 
 
@@ -21,6 +22,14 @@ class StoreData(models.Model):
 
     def __str__(self):
         return str(self.store_name)
+
+    def get_absolute_url(self):
+        return reverse("store_data_detail", kwargs={"slug": self.slug})
+
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.store_name)
+        return super().save(*args, **kwargs)
 
     def logo(self):
         if self.store_logo.url is not None:

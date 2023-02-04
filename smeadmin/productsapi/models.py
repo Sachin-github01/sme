@@ -1,6 +1,7 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.safestring import mark_safe
-
+from django.template.defaultfilters import slugify
 from storeapi.models import StoreData
 
 
@@ -14,6 +15,14 @@ class Product(models.Model):
 
     def __str__(self):
         return str(self.product_name)
+
+    def get_absolute_url(self):
+        return reverse("product_detail", kwargs={"slug": self.slug})
+
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.product_name)
+        return super().save(*args, **kwargs)
 
     def image(self):
         if self.product_image.url is not None:

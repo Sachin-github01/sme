@@ -25,12 +25,7 @@ class UserManager(BaseUserManager):
         """
         Creates and saves a superuser with the given email, name, tc and password.
         """
-        user = self.create_user(
-            email,
-            password=password,
-            name=name,
-            tc=tc,
-        )
+        user = self.create_user(email, password=password, name=name, tc=tc)
         user.is_admin = True
         user.save(using=self._db)
         return user
@@ -61,7 +56,7 @@ class User(AbstractBaseUser):
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always
-        return self.is_admin
+        return True
 
     def has_module_perms(self, app_label):
         "Does the user have permissions to view the app `app_label`?"
